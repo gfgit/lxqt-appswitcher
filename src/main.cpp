@@ -55,8 +55,10 @@ int main(int argc, char* argv[])
         app.setStyleSheet(QLatin1String("file:///%1/lxqt-app-switcher.qss").arg(theme.path()));
     }
 
+    Settings::instance().setIconSize(512);
 
     AppSwitcher switcher(nullptr);
+    switcher.setOrientation(Qt::Horizontal);
     switcher.showSwitcher();
 
     return app.exec();

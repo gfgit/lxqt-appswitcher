@@ -68,9 +68,11 @@ AppSwitcher::AppSwitcher(QWidget* parent)
         }
     });
 
-    setItemDelegate(new AppItemDelegate(this));
+    m_delegate = new AppItemDelegate(this);
+    setItemDelegate(m_delegate);
     setContentsMargins(5, 5, 5, 5);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setOrientation(Qt::Vertical);
+
     m_timer = new QTimer(this);
     m_timer->setInterval(100);
     m_timer->setSingleShot(true);
@@ -121,6 +123,24 @@ void AppSwitcher::showSwitcher(bool forward)
     selectItem(forward);
     showMaximized();
     m_timer->start();
+}
+
+void AppSwitcher::setOrientation(Qt::Orientation orientation)
+{
+    m_delegate->setOrientation(orientation);
+
+    if(orientation == Qt::Horizontal)
+    {
+        setFlow(QListView::LeftToRight);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    }
+    else
+    {
+        setFlow(QListView::TopToBottom);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
 }
 
 void AppSwitcher::selectItem(bool forward)

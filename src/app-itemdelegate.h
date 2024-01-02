@@ -34,6 +34,8 @@ public:
     AppItemDelegate(QObject* parent);
     void init();
 
+    void setOrientation(Qt::Orientation orient);
+
 protected:
     virtual void  paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -41,4 +43,5 @@ protected:
 private:
     int m_iconSize = 32;
     int m_maxTextWidth = 0;
+    Qt::Orientation m_orientation = Qt::Vertical;
 };

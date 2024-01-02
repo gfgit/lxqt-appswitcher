@@ -34,6 +34,8 @@ namespace GlobalKeyShortcut {
 class Action;
 }
 
+class AppItemDelegate;
+
 class AppSwitcher : public QListView
 {
     Q_OBJECT
@@ -41,6 +43,8 @@ public:
     AppSwitcher(QWidget* parent);
 
     void showSwitcher(bool forward = true);
+
+    void setOrientation(Qt::Orientation orientation);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -56,4 +60,5 @@ private:
     GlobalKeyShortcut::Action* m_globalRShortcut;
     QTimer*                    m_timer;
     int                        m_current = 0;
+    AppItemDelegate*           m_delegate = nullptr;
 };
