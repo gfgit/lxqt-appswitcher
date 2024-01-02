@@ -44,11 +44,14 @@ public:
 
     void showSwitcher(bool forward = true);
 
-    void setOrientation(Qt::Orientation orientation);
+    void setOrientation(Qt::Orientation orientation, bool force = false);
+
+    Qt::Orientation calculateBestOrientation();
 
 protected:
-    void keyReleaseEvent(QKeyEvent* event) override;
-    void closeEvent(QCloseEvent*) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
+    void closeEvent(QCloseEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
     void selectItem(bool forward = true);
@@ -61,4 +64,5 @@ private:
     QTimer*                    m_timer;
     int                        m_current = 0;
     AppItemDelegate*           m_delegate = nullptr;
+    Qt::Orientation            m_orientation = Qt::Vertical;
 };

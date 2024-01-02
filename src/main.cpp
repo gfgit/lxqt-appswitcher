@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     Settings::instance().setIconSize(512);
 
     AppSwitcher switcher(nullptr);
-    switcher.setOrientation(Qt::Horizontal);
+    switcher.setOrientation(Qt::Vertical);
     switcher.showSwitcher();
 
     return app.exec();

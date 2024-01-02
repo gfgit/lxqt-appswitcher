@@ -44,7 +44,7 @@
 AppSwitcher::AppSwitcher(QWidget* parent)
     : QListView(parent)
 {
-    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint);
+    //setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint);
     setObjectName("AppSwitcher");
 
     m_globalShortcut = GlobalKeyShortcut::Client::instance()->addAction(
@@ -71,7 +71,7 @@ AppSwitcher::AppSwitcher(QWidget* parent)
     m_delegate = new AppItemDelegate(this);
     setItemDelegate(m_delegate);
     setContentsMargins(5, 5, 5, 5);
-    setOrientation(Qt::Vertical);
+    setOrientation(Qt::Vertical, true);
 
     m_timer = new QTimer(this);
     m_timer->setInterval(100);
@@ -125,11 +125,15 @@ void AppSwitcher::showSwitcher(bool forward)
     m_timer->start();
 }
 
-void AppSwitcher::setOrientation(Qt::Orientation orientation)
+void AppSwitcher::setOrientation(Qt::Orientation orientation, bool force)
 {
-    m_delegate->setOrientation(orientation);
+    if(!force && m_orientation == orientation)
+        return;
 
-    if(orientation == Qt::Horizontal)
+    m_orientation = orientation;
+    m_delegate->setOrientation(m_orientation);
+
+    if(m_orientation == Qt::Horizontal)
     {
         setFlow(QListView::LeftToRight);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -141,6 +145,13 @@ void AppSwitcher::setOrientation(Qt::Orientation orientation)
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
+}
+
+Qt::Orientation AppSwitcher::calculateBestOrientation()
+{
+    if(height() > width())
+        return Qt::Vertical;
+    return Qt::Horizontal;
 }
 
 void AppSwitcher::selectItem(bool forward)
@@ -168,13 +179,13 @@ void AppSwitcher::activateWindow(WId id)
     KX11Extras::forceActiveWindow(id);
 }
 
-void AppSwitcher::keyReleaseEvent(QKeyEvent* event)
+void AppSwitcher::keyReleaseEvent(QKeyEvent* e)
 {
 //    if (event->modifiers() == 0) {
 //        close();
 //        activateWindow(model()->data(model()->index(m_current, 0), AppRole::Window).value<WId>());
 //    }
-    QWidget::keyReleaseEvent(event);
+    QWidget::keyReleaseEvent(e);
 }
 
 void AppSwitcher::timer()
@@ -190,4 +201,12 @@ void AppSwitcher::timer()
 void AppSwitcher::closeEvent(QCloseEvent*)
 {
     m_timer->stop();
+}
+
+void AppSwitcher::resizeEvent(QResizeEvent *e)
+{
+    QListView::resizeEvent(e);
+
+    Qt::Orientation newOrient = calculateBestOrientation();
+    setOrientation(newOrient);
 }
