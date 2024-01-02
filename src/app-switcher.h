@@ -40,12 +40,13 @@ class AppSwitcher : public QListView
 public:
     AppSwitcher(QWidget* parent);
 
+    void showSwitcher(bool forward = true);
+
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
     void closeEvent(QCloseEvent*) override;
 
 private:
-    void showSwitcher(bool forward = true);
     void selectItem(bool forward = true);
     void timer();
     void activateWindow(WId id);
