@@ -46,8 +46,9 @@ void AppModel::create()
     bool byScreen = Settings::instance().filterCurrentScreen();
 
     for (WId wid : KX11Extras::stackingOrder()) {
-        KWindowInfo     info(wid, NET::WMVisibleName | NET::WMState | NET::XAWMState | NET::WMWindowType);
+        KWindowInfo     info(wid, NET::WMVisibleName | NET::WMState | NET::XAWMState | NET::WMWindowType, NET::WM2DesktopFileName);
         NET::WindowType type = info.windowType(NET::AllTypesMask);
+        qDebug() << info.desktopFileName();
         if (!info.hasState(NET::SkipTaskbar) && (type == NET::Normal || type == NET::Dialog || type == NET::Unknown) &&
             filter(wid, byDesk, byScreen)) {
             m_list.prepend({wid, info.visibleName(), KX11Extras::icon(wid, iconSize, iconSize, true)});
