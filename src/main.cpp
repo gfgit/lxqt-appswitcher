@@ -48,15 +48,16 @@ LXQt::LXQtTheme currentTheme()
 int main(int argc, char* argv[])
 {
     LXQt::Application app(argc, argv);
-    app.setQuitOnLastWindowClosed(false);
+    //app.setQuitOnLastWindowClosed(false);
 
     LXQt::LXQtTheme theme = currentTheme();
     if (QFile::exists(theme.path() + QLatin1String("/lxqt-app-switcher.qss"))) {
         app.setStyleSheet(QLatin1String("file:///%1/lxqt-app-switcher.qss").arg(theme.path()));
     }
 
-    QWidget     hiddenPreviewParent(nullptr, Qt::Tool);
-    AppSwitcher switcher(&hiddenPreviewParent);
+
+    AppSwitcher switcher(nullptr);
+    switcher.showSwitcher();
 
     return app.exec();
 }
